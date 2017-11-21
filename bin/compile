@@ -30,11 +30,11 @@ indent() {
 # [ $# -eq 0 ] && { echo "Usage: $0 format" ; exit 1; }
 
 if [ ! -f $ENV_DIR/KUBERNETES_VERSION ]; then
-  echo "Buscando ultima version" | indent
+  echo "Installing the most recent version" | indent
   latest_url="https://storage.googleapis.com/kubernetes-release/release/stable.txt"
   release=$(wget ${latest_url} -q -O -)
 else
-  echo "Version definida." | indent
+  echo "Installing the pinned version." | indent
   release=$(cat $ENV_DIR/KUBERNETES_VERSION);
 fi
 
