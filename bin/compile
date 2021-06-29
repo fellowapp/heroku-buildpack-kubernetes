@@ -92,5 +92,35 @@ fi
 filedest=$BUILD_DIR/.kubernetes/bin/kubectl
 cp $file $filedest
 chmod +x $filedest
+
+# Regardless of KUBERNETES_VERSION, always install the latest version so that it's available.
+
+latest_url="https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+release=$(wget ${latest_url} -q -O -)
+
+if [[ $release != v* ]]; then
+  release="v${release}"
+fi
+
+release_url="https://storage.googleapis.com/kubernetes-release/release/${release}/bin/${platform}/${arch}/kubectl"
+file=${CACHE_DIR}/${release}_${platform}_${arch}_kubectl
+
+if [ ! -f $file ]; then
+  echo "Archivo no encontrado en cache, descargando" | indent
+  if [[ $(which wget) ]]; then
+    wget -q -O ${file} ${release_url}
+  elif [[ $(which curl) ]]; then
+    curl -s -L -o ${file} ${release_url}
+  else
+    echo "Couldn't find curl or wget.  Bailing out."
+    exit 1
+  fi
+fi
+
+
+filedest=$BUILD_DIR/.kubernetes/bin/kubectl-${release}
+cp $file $filedest
+chmod +x $filedest
+
 echo "Done" | indent
 exit 0
