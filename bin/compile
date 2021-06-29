@@ -118,7 +118,7 @@ if [ ! -f $file ]; then
 fi
 
 
-filedest=$BUILD_DIR/.kubernetes/bin/kubectl-${release}
+filedest=$BUILD_DIR/.kubernetes-latest/bin/kubectl
 cp $file $filedest
 chmod +x $filedest
 
